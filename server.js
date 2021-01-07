@@ -5,19 +5,39 @@ const { buildSchema } = require('graphql');
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
+  type RandomDie {
+    numSides: Int!
+    rollOnce: Int!
+    roll(numRolls: Int!): [Int]
+  }
+  
   type Query {
-    rollDice(numDice: Int!, numSides: Int): [Int]
+    getDie(numSides: Int): RandomDie
   }
 `);
 
-// The root provides a resolver function for each API endpoint
-const root = {
-    rollDice: (args) => {
-        const output = [];
-        for (let i = 0; i < args.numDice; i++) {
-            output.push(1 + Math.floor(Math.random() * (args.numSides || 6)));
+class RandomDie {
+    constructor(numSides) {
+        this.numSides = numSides;
+    }
+
+    rollOnce() {
+        return 1 + Math.floor(Math.random() * this.numSides);
+    }
+
+    roll({numRolls}) {
+        var output = [];
+        for (let i = 0; i < numRolls; i++) {
+            output.push(this.rollOnce());
         }
         return output;
+    }
+}
+// The root provides a resolver function for each API endpoint
+const root = {
+    getDie: ({numSides}) => {
+        const output = [];
+        return new RandomDie(numSides || 6);
     }
 };
 
