@@ -6,22 +6,18 @@ const { buildSchema } = require('graphql');
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
   type Query {
-    quoteOfTheDay: String
-    random: Float!
-    rollThreeDice: [Int]
+    rollDice(numDice: Int!, numSides: Int): [Int]
   }
 `);
 
 // The root provides a resolver function for each API endpoint
 const root = {
-    quoteOfTheDay: () => {
-        return Math.random() < .5 ? 'Take it easy' : 'Salvation lies within';
-    },
-    random: () => {
-        return Math.random();
-    },
-    rollThreeDice: () => {
-        return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6));
+    rollDice: (args) => {
+        const output = [];
+        for (let i = 0; i < args.numDice; i++) {
+            output.push(1 + Math.floor(Math.random() * (args.numSides || 6)));
+        }
+        return output;
     }
 };
 
