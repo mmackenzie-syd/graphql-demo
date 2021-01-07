@@ -4,7 +4,7 @@ Reference:
 
 https://graphql.org/graphql-js/
 
-(Getting Started)[https://graphql.org/graphql-js/]
+[Getting Started](https://graphql.org/graphql-js/)
 
 Running Express + GraphQL
 
